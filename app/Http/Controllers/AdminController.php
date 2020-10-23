@@ -12,7 +12,8 @@ class AdminController extends Controller
 	}
     public function adminDeshboard(Request $request)
 	{
-		$users = User::all();			
+		//$users = User::all();			
+		$users = User::where('id', '!=', 1)->get();
 		return view('admin_deshboard', compact('users'));
 	}
 	public function status(Request $request){
