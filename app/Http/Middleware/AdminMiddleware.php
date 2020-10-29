@@ -19,7 +19,7 @@ class AdminMiddleware
             return $next($request);
         }
         else{
-            return redirect('home')->with('status', 'you are');
+            return redirect('home')->with('status', 'you are not admin');
         }
     }
 }

@@ -33,6 +33,9 @@ Route::get('status', 'AdminController@status')->name('status');
 Route::get('forget-password', 'Auth\ForgotPasswordController@getEmail');
 Route::post('forget-password', 'Auth\ForgotPasswordController@postEmail');
 
+Route::get('reset-password/{token}', 'Auth\ResetPasswordController@getPassword');
+Route::post('reset-password', 'Auth\ResetPasswordController@updatePassword');
+
 // Route::group(['middleware'  => ['auth','admin']], function () {
 	// Route::get('/dashboard', 'Admin\AdminController@index');
 	// Route::get('/user-list', 'Admin\AdminController@userList');

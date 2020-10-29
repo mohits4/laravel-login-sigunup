@@ -17,7 +17,8 @@ class ForgotPasswordController extends Controller
     }
 	public function postEmail(Request $request)
     {
-        $request->validate([
+        //dd($request->all());
+                $request->validate([
             'email' => 'required|email|exists:users',
         ]);
 
@@ -29,7 +30,7 @@ class ForgotPasswordController extends Controller
 
         Mail::send('auth.verify',['token' => $token], function($message) use ($request) {
                   $message->from($request->email);
-                  $message->to('codingdriver15@gmail.com');
+                  $message->to('mksaxena27@gmail.com');
                   $message->subject('Reset Password Notification');
                });
 
