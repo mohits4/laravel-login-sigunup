@@ -242,31 +242,6 @@ table.table .avatar {
 	font-weight: normal;
 }	
 </style>
-<script>
-$(document).ready(function(){
-	// Activate tooltip
-	$('[data-toggle="tooltip"]').tooltip();
-	
-	// Select/Deselect checkboxes
-	var checkbox = $('table tbody input[type="checkbox"]');
-	$("#selectAll").click(function(){
-		if(this.checked){
-			checkbox.each(function(){
-				this.checked = true;                        
-			});
-		} else{
-			checkbox.each(function(){
-				this.checked = false;                        
-			});
-		} 
-	});
-	checkbox.click(function(){
-		if(!this.checked){
-			$("#selectAll").prop("checked", false);
-		}
-	});
-});
-</script>
 </head>
 <body>
 <div class="container-xl">
@@ -277,10 +252,10 @@ $(document).ready(function(){
 					<div class="col-sm-6">
 						<h2>Connection <b>List</b></h2>
 					</div>
-					<!-- <div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
-					</div> -->
+					 <div class="col-sm-6">
+						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Connection</span></a>
+						<!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
+					</div> 
 				</div>
 			</div>
 			<table class="table table-striped table-hover">
@@ -296,7 +271,8 @@ $(document).ready(function(){
 						<th>Gateway</th>
 						<th>Genmask</th>
 						<th>Flags</th>
-                        <th>Metric</th>                       
+                        <th>Metric</th> 
+						<th>ref</th>                      
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -308,24 +284,14 @@ $(document).ready(function(){
 						<td>{{$connection->genmask}}</td>
 						<td>{{$connection->flags}}</td>
 						<td>{{$connection->metric}}</td>
+						<td>{{$connection->ref}}</td>
 						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#editEmployeeModal" class="connection_edit" conid="{{ $connection->id}}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a onclick="confirm_delete({{$connection->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							
 						</td>
 					</tr>
-                    @endforeach	
-										
-					<tr>
-                        <td>Demo</td>
-                        <td>Demo</td>
-						<td>Demo</td>
-						<td>Demo</td>
-						<td>Demo</td>
-						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr> 
+                    @endforeach						
 				</tbody>
 			</table>
 			<div class="clearfix">
@@ -344,31 +310,31 @@ $(document).ready(function(){
 		</div>
 	</div>        
 </div>
-<!-- Edit Modal HTML -->
+<!-- Add Modal HTML -->
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form>
 				<div class="modal-header">						
-					<h4 class="modal-title">Add Employee</h4>
+					<h4 class="modal-title">Add Connection</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">					
 					<div class="form-group">
-						<label>Name</label>
+						<label>Destination</label>
 						<input type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Email</label>
+						<label>Gateway</label>
 						<input type="email" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<label>	Genmask</label>
+						<input type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Phone</label>
-						<input type="text" class="form-control" required>
+						<label>Metric</label>
+						<input type="text"  class="form-control" required>
 					</div>					
 				</div>
 				<div class="modal-footer">
@@ -383,27 +349,28 @@ $(document).ready(function(){
 <div id="editEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="POST" action="/connection/update">
+			@csrf
 				<div class="modal-header">						
-					<h4 class="modal-title">Edit Employee</h4>
+					<h4 class="modal-title">Edit List</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">					
 					<div class="form-group">
-						<label>Name</label>
-						<input type="text" class="form-control" required>
+						<label>Destination</label>
+						<input type="text" id="destination" value="{{$connection->destination}}" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Email</label>
-						<input type="email" class="form-control" required>
+						<label>gateway</label>
+						<input type="text" id="gateway" value="{{$connection->gateway}}" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<label>Genmask</label>
+						<input type="text" id="genmask" value="{{$connection->genmask}}" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Phone</label>
-						<input type="text" class="form-control" required>
+						<label>Metric</label>
+						<input type="text" id="metric" value="{{$connection->metric}}" class="form-control" required>
 					</div>					
 				</div>
 				<div class="modal-footer">
@@ -413,92 +380,49 @@ $(document).ready(function(){
 			</form>
 		</div>
 	</div>
-</div>
-<!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+</div> 
+  <!-- Delete Modal HTML -->
+  <div id="delete_confirm" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content">
-			<form method="POST" action="" id="deleteform">
-            {{csrf_field()}}
-            
+		<div class="modal-content">         
 				<div class="modal-header">						
-					<h4 class="modal-title">Delete Employee</h4>
+					<h4 class="modal-title">Delete User</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">					
-					<p>Are you sure you want to delete these Records?</p>
-					<!-- <p class="text-warning"><small>This action cannot be undone.</small></p> -->
+					<p>Are you sure you want to delete these Records?</p>					
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
-				</div>
-			</form>
+					<span id="delete_butt_id"></span>
+				</div>			
 		</div>
 	</div>
 </div>
 </body>
 <script type="text/javascript">
-$(document).ready(function() {
-  $(".toggle-class").change(function()  {
-    //alert('sagsd');
-    var id = $(this).attr("data-id");
-    //var status = $("#activitymessage").val();
-    var id = id;
-    $.ajax({
-      type: "get",
-      url: "{{route("status")}}",
-      data: {id: id},
-      success: function(data){
-              console.log(data.success)
-            }
-      //       success: function(msg) {
-      //   location.reload();
-      // }
+$('.connection_edit').on('click',function () {
+    var user_id = $(this).attr('conid');	    
+     $.ajax({
+        url: "/getUserData",
+        type: "get",
+        data: {user_id: user_id} ,
+        success: function (response) {
+          console.log(response); 		          
+           $('#destination').val(response['destination']);
+           $('#gateway').val(response['gateway']);
+           $('#genmask').val(response['genmask']);
+           $('#metric').val(response['metric']);
+        },
     });
-   });
   });
-</script>
 
-<script type="text/javascript">
-//   $(document).ready(function() {
-//   $(".toggle-class").change(function()  {   
-//     var id = $(this).attr("data-id");   
-//     var id = id;
-//     $.ajax({
-//       type: "get",
-//       url: "{{route("status")}}",
-//       data: {id: id},
-//       success: function(data){
-//               console.log(data.success)
-//             }
-    
-//     });
-//    });
-//   });
+function confirm_delete(id){
+  var url="{{url('connection-list/delete/')}}";
+  var a='<a href="'+url+'/'+id+'" class="btn btn-primary">Confirm</a>';
+  $("#delete_butt_id").html(a);
+  $("#delete_confirm").modal();
+}
 </script>
-<script type="text/javascript">
-// var user_id;
-//   $(document).on('click', '.delete', function() {
-// 	user_id = $(this).attr('id');
-// 	$(#confrimModel).model('show');
-//   });
-//   $('#ok_button').click(function() {
-// 	$.ajax({
-// 		url:"admin1-deshboard/destroy/"+user_id,
-// 		beforeSend:function(){
-// 			$('#ok_button').text('Deleting......');
-// 		},
-// 		success:function(data){
-// 			setTimeout(function(){
-// 				$('#confirmModel').modal('show');
-// 				}, 2000);
-// 		}
-// 	});
-//   });
-
-</script>
-
 </html>
-
 @endsection

@@ -35,30 +35,7 @@ class AdminController extends Controller
         $users = User::findorFail($request['id']);
 
         return $users;
-	}
-	public function update($id)
-    {
-    	$category = User::find($id);
-
-	    return response()->json([
-	      'data' => $user
-	    ]);
-    }
-
-    public function edit(Request $request, $id)
-    {
-      User::updateOrCreate(
-       [
-        'id' => $id
-       ],
-       [
-        'name' => $request->name,
-       ]
-      );
-
-      return response()->json([ 'success' => true ]);
-
-    }
+	}   
 
 	public function delete($id){		
 			User::where('id', $id)->delete();	

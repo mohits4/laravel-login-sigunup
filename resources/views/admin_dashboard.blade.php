@@ -312,6 +312,7 @@ $(document).ready(function(){
 						<td>
 							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 							<a onclick="confirm_delete({{$user->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="" id="editCompany" data-toggle="modal" data-target='#practice_modal' data-id="{{ $user->id }}">Edit</a>
 						</td>
 					</tr>
                 @endforeach				
@@ -323,6 +324,21 @@ $(document).ready(function(){
 		</div>
 	</div>        
 </div>
+
+
+<div class="modal fade" id="practice_modal">
+                        <div class="modal-dialog">
+                           <form id="companydata">
+                                <div class="modal-content">
+                                <input type="hidden" id="color_id" name="color_id" value="">
+                                <div class="modal-body">
+                                    <input type="text" name="name" id="name" value="" class="form-control">
+                                </div>
+                                <input type="submit" value="Submit" id="submit" class="btn btn-sm btn-outline-danger py-0" style="font-size: 0.8em;">
+                            </div>
+                           
+                        </div>
+                    </div>
   <!-- Delete Modal HTML -->
   <div id="delete_confirm" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -345,7 +361,8 @@ $(document).ready(function(){
 <div id="editEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="POST" action="">
+			@csrf
 				<div class="modal-header">						
 					<h4 class="modal-title">Edit Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -379,6 +396,36 @@ $(document).ready(function(){
 
 
 </body>
+
+<script>
+
+$(document).ready(function () {
+
+$.ajaxSetup({
+    headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+});
+
+
+$('body').on('click', '#editCompany', function (event) {
+
+    event.preventDefault();
+    var id = $(this).data('id');
+    console.log(id)
+    $.get('color/' + id + '/edit', function (data) {
+         $('#userCrudModal').html("Edit category");
+         $('#submit').val("Edit category");
+         $('#practice_modal').modal('show');
+         $('#color_id').val(data.data.id);
+         $('#name').val(data.data.name);
+     })
+});
+
+}); 
+</script>
+
+
 <script type="text/javascript">
 function confirm_delete(id){
   var url="{{url('admin-dashboard/delete/')}}";

@@ -25,8 +25,23 @@ Route::get('login', 'Auth\LoginController@login')->name('login');
 Route::post('login', 'Auth\LoginController@doLogin');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::group(['middleware' => ['auth', 'admin']], function(){
-Route::get('admin-deshboard', 'AdminController@adminDeshboard')->name('admin-deshboard');
+Route::get('admin-dashboard', 'AdminController@adminDashboard')->name('admin-dashboard');
+Route::get('admin-dashboard/delete/{id}', 'AdminController@delete');
+Route::get('admin-dashboard/{id}/edit', 'AdminController@update')->name('admin-dashboard.update');
+Route::post('admin-dashboard/{id}', 'AdminController@edit')->name('admin-dashboard.edit');
+
+Route::get('connection-list', 'ConnectionController@index')->name('connection-list');
+Route::get('connection-list/delete/{id}', 'ConnectionController@delete');
+Route::get('getUserData', 'ConnectionController@getUserData');
+Route::get('connection/update/{id}', 'ConnectionController@update');
+
+
+
+
 });
+
+
+
 Route::get('/home', 'HomeController@home')->name('home');
 Route::get('status', 'AdminController@status')->name('status');
 

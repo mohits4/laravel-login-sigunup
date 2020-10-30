@@ -39,7 +39,7 @@ class LoginController extends Controller
 				}
 				if(($user->role_type == 'admin')){
 					//updateLastLogin($user->id);		
-					return redirect()->intended('admin-deshboard');
+					return redirect()->intended('admin-dashboard');
 				}else{
 					return redirect('home');
 				}
