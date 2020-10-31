@@ -24,6 +24,8 @@ Route::post('register', 'Auth\RegisterController@doRegister')->name('register');
 Route::get('login', 'Auth\LoginController@login')->name('login');
 Route::post('login', 'Auth\LoginController@doLogin');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+
 Route::group(['middleware' => ['auth', 'admin']], function(){
 Route::get('admin-dashboard', 'AdminController@adminDashboard')->name('admin-dashboard');
 Route::get('admin-dashboard/delete/{id}', 'AdminController@delete');
@@ -32,8 +34,12 @@ Route::post('admin-dashboard/{id}', 'AdminController@edit')->name('admin-dashboa
 
 Route::get('connection-list', 'ConnectionController@index')->name('connection-list');
 Route::get('connection-list/delete/{id}', 'ConnectionController@delete');
+
 Route::get('getUserData', 'ConnectionController@getUserData');
-Route::get('connection/update/{id}', 'ConnectionController@update');
+Route::post('connection/update/{id}', 'ConnectionController@update');
+
+
+Route::post('connection/store','ConnectionController@store');
 
 
 

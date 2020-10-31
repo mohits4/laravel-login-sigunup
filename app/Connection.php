@@ -6,5 +6,8 @@ class Connection extends Authenticatable{
 	
     protected $table = 'tbl_route_tables_info';
     protected $primarykey = 'id';
-   
+    // protected $fillable = [
+    //     'destination', 'gateway',
+    // ];
+    // protected $table = 'tbl_route_tables_info';
 }

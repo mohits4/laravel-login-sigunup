@@ -253,6 +253,7 @@ table.table .avatar {
 						<h2>Connection <b>List</b></h2>
 					</div>
 					 <div class="col-sm-6">
+					 <a href="javascript:void(0)" class="btn btn-success mb-2" id="new-customer" data-toggle="modal">New Customer</a>
 						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Connection</span></a>
 						<!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
 					</div> 
@@ -349,8 +350,9 @@ table.table .avatar {
 <div id="editEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form method="POST" action="/connection/update">
+			<form method="POST" action ="{{ url('connection/update', $connection->id )}}">
 			@csrf
+			<input type="hidden" name="selectitem" id="selectitem" value=""> 
 				<div class="modal-header">						
 					<h4 class="modal-title">Edit List</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -358,11 +360,11 @@ table.table .avatar {
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Destination</label>
-						<input type="text" id="destination" value="{{$connection->destination}}" class="form-control" required>
+						<input type="text" id="destinationf" name="destination" value="{{$connection->destination}}" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>gateway</label>
-						<input type="text" id="gateway" value="{{$connection->gateway}}" class="form-control" required>
+						<input type="text" id="gateway" name="gateway" value="{{$connection->gateway}}" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Genmask</label>
@@ -375,7 +377,7 @@ table.table .avatar {
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
+					<input type="submit" id="update" class="btn btn-info" value="Save">
 				</div>
 			</form>
 		</div>
@@ -399,24 +401,82 @@ table.table .avatar {
 		</div>
 	</div>
 </div>
+<!--  -->
+<div class="modal fade" id="crud-modal" aria-hidden="true" >
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h4 class="modal-title" id="customerCrudModal"></h4>
+</div>
+<div class="modal-body">
+<form name="custForm" action="{{ url('connection/store')}}" method="POST">
+<input type="hidden" name="cust_id" id="cust_id" >
+@csrf
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12">
+<div class="form-group">
+<strong>Name:</strong>
+<input type="text" name="destination" id="destination" class="form-control" placeholder="Name" onchange="validate()" >
+</div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+<div class="form-group">
+<strong>Email:</strong>
+<input type="text" name="gateway" id="gateway" class="form-control" placeholder="Email" onchange="validate()">
+</div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12 text-center">
+<button type="submit" id="btn-save" name="btnsave" class="btn btn-primary">Submit</button>
+<a href="" class="btn btn-danger">Cancel</a>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<!--  -->
+
+
+
+
+
 </body>
 <script type="text/javascript">
+
+$('#new-customer').click(function () {
+$('#btn-save').val("create-customer");
+$('#customer').trigger("reset");
+$('#customerCrudModal').html("Add New Customer");
+$('#crud-modal').modal('show');
+});
+
+
+
+/*
+For Update
+*/
 $('.connection_edit').on('click',function () {
-    var user_id = $(this).attr('conid');	    
+    var user_id = $(this).attr('conid');
+
+	$('#editEmployeeModal').find('#selectitem').val(user_id);
+	
      $.ajax({
         url: "/getUserData",
         type: "get",
         data: {user_id: user_id} ,
         success: function (response) {
           console.log(response); 		          
-           $('#destination').val(response['destination']);
+           $('#destinationf').val(response['destination']);
            $('#gateway').val(response['gateway']);
            $('#genmask').val(response['genmask']);
            $('#metric').val(response['metric']);
         },
     });
   });
-
+/*
+For Delete
+*/
 function confirm_delete(id){
   var url="{{url('connection-list/delete/')}}";
   var a='<a href="'+url+'/'+id+'" class="btn btn-primary">Confirm</a>';

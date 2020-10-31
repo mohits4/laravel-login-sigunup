@@ -12,23 +12,47 @@ class ConnectionController extends Controller
 		$connections = Connection::all();
 		return view('connection_list', compact('connections'));
 	}
+
+	public function store(Request $request)
+	{
+		// $request->validate([
+		// 'destination' => 'required',
+		// 'gateway' => 'required',		
+		// ],
+		// [
+		// 	'destination.required' => 'The destination field is required.',
+		// 	'gateway.required' => 'gateway',
+		// ]);
+
+
+		$post = new Connection;
+		$post->destination = $request->input('destination');
+		$post->gateway = $request->input('gateway');
+		$post->save();
+		return redirect('connection-list')->with('success', 'Connection updated successfully');	
+	}
+
+
+
+
+
+
 	public function getUserData(Request $request)
     {
-		$Connection = Connection::findorFail($request['user_id']);
+		$Connection = Connection::find($request['user_id']);
 		return $Connection;
 		
 	}
 
 	public function update(Request $request, $id){  
-		die('dsf');         
-	 
-	 
-	 $user         = Connection::find($id);
-	 $user->name   = $request->first_name;
-	 $user->email  = $request->email;
-	 $user->save();
-		return redirect('admin-dashboard')->with('success', 'user updated successfully');
-	
+		//dd($request->all());
+		//dd($id);	
+		$connection = Connection::find($request->get('selectitem'));
+		$connection->destination   = $request->get('destination');
+		$connection->gateway  = $request->get('gateway');
+		$test1 = $connection->update();
+		//dd($test1);
+		return redirect('connection-list')->with('success', 'Connection updated successfully');	
 	}
 
 	public function delete($id){		

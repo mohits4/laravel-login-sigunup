@@ -13,7 +13,7 @@ class LoginController extends Controller
     public function login()
 	{
 		return view('auth.login');
-	}
+	}	
 	public function doLogin(Request $request)
     {
         $input = $request->all();
