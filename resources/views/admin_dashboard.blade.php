@@ -312,7 +312,7 @@ $(document).ready(function(){
 						<td>
 							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 							<a onclick="confirm_delete({{$user->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							<a href="" id="editCompany" data-toggle="modal" data-target='#practice_modal' data-id="{{ $user->id }}">Edit</a>
+							<!-- <a href="" id="editCompany" data-toggle="modal" data-target='#practice_modal' data-id="{{ $user->id }}">Edit</a> -->
 						</td>
 					</tr>
                 @endforeach				

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ConnectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +41,6 @@ Route::post('connection/update/{id}', 'ConnectionController@update');
 
 
 Route::post('connection/store','ConnectionController@store');
-
-
 
 
 });

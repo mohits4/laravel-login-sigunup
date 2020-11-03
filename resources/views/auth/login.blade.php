@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>SafeandSecureRetirementIS-FINT</title>
+  <title>911Inform-LGLA | Login</title>
   <meta name="description" content="">
   <meta name="author" content="">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,11 +14,7 @@
 </head>
 
 <body>
-	@if(session()->has('error'))
-		<div class="alert alert-danger">
-		{{ session()->get('error') }}
-		</div>
-	@endif
+	
 
 	<section class="loginSec">
      
@@ -45,6 +41,11 @@ industry's standard dummy</p>
      	<div class="log50right">
      		<div class="loginForm">
      			<div class="formTitle">
+					@if(session()->has('error'))
+						<div class="alert alert-danger">
+						{{ session()->get('error') }}
+						</div>
+					@endif
      				<h1>Login</h1>
      				<p>Log in with your data you exerted during<br/>
 your registration </p>
@@ -93,17 +94,7 @@ your registration </p>
 				<div class="Logbtn">
 					<button  class="btn">Login <img src="{{ asset('registaion/images/loginicon.png') }}"></button>
 				</div>
-			</div>
-								
-
-        
-		
-
-		
-		
-			
-
-       	
+			</div>       	
 	</div>	        
     </form>
     

@@ -253,7 +253,10 @@ table.table .avatar {
 						<h2>Connection <b>List</b></h2>
 					</div>
 					 <div class="col-sm-6">
+					 <!-- <a href="javascript:void(0)" class="btn btn-success" id="new-customer" data-toggle="modal">New Customer</a> -->
 						<a href="javascript:void(0)" class="btn btn-success" id="new-customer" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Connection</span></a>
+						<!-- <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Connection</span></a> -->
+						<!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
 					</div> 
 				</div>
 			</div>
@@ -266,30 +269,28 @@ table.table .avatar {
 								<label for="selectAll"></label>
 							</span>
 						</th> -->
-						<th>No.</th>
 						<th>Destination</th>
 						<th>Gateway</th>
-						<th>Genmask</th>					
-                        <th>Metric</th>
-						<th>Tunnel IP</th>
-						<th>Device Serial</th>					 						                      
+						<th>Genmask</th>
+						<!-- <th>Flags</th> -->
+                        <th>Metric</th> 
+						<th>ref</th>                      
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-				@php $no = 1; @endphp
                 @foreach($connections as $connection)
-					<tr>
-						<td>{{ $no++ }}</td>						
+					<tr>						
 						<td>{{$connection->destination}}</td>
                         <td>{{$connection->gateway}}</td>
-						<td>{{$connection->genmask}}</td>						
+						<td>{{$connection->genmask}}</td>
+						<!-- <td>{{$connection->flags}}</td> -->
 						<td>{{$connection->metric}}</td>
-						<td>{{$connection->tunnel_ip}}</td>
-						<td>{{$connection->device_serial}}</td>						
+						<td>{{$connection->ref}}</td>
 						<td>
 							<a href="#editEmployeeModal" class="connection_edit" conid="{{ $connection->id}}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a onclick="confirm_delete({{$connection->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>							
+							<a onclick="confirm_delete({{$connection->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							
 						</td>
 					</tr>
                     @endforeach						
@@ -373,15 +374,7 @@ table.table .avatar {
 					<div class="form-group">
 						<label>Metric</label>
 						<input type="text" id="metric" name="metric" value="{{$connection->metric}}" class="form-control" required>
-					</div>		
-					<div class="form-group">
-						<label>Tunnel IP</label>
-						<input type="text" id="metric" name="metric" value="{{$connection->tunnel_ip}}" class="form-control" required>
-					</div>	
-					<div class="form-group">
-						<label>Device Serial</label>
-						<input type="text" id="metric" name="metric" value="{{$connection->device_serial}}" class="form-control" required>
-					</div>				
+					</div>					
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -423,16 +416,6 @@ table.table .avatar {
 </div>
 <div class="modal-body">
 <form name="custForm" action="{{ url('connection/store')}}" method="POST">
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <!-- <input type="hidden" name="cust_id" id="cust_id" > -->
 @csrf
 <div class="row">
@@ -451,11 +434,6 @@ table.table .avatar {
 <div class="form-group">
 <strong>Gateway:</strong>
 <input type="text" name="gateway" id="gateway" class="form-control" onchange="validate()" required>
-@error('destination')
-<span class="invalid-feedback" role="alert">
-<strong>{{ $message }}</strong>
-</span>
-@enderror
 </div>
 </div>
 
@@ -463,27 +441,6 @@ table.table .avatar {
 <div class="form-group">
 <strong>Genmask:</strong>
 <input type="text" name="genmask" id="genmask" class="form-control" onchange="validate()" required>
-</div>
-</div>
-
-<div class="col-xs-12 col-sm-12 col-md-12">
-<div class="form-group">
-<strong>Metric:</strong>
-<input type="text" name="metric" id="metric" class="form-control" onchange="validate()" required>
-</div>
-</div>
-
-<div class="col-xs-12 col-sm-12 col-md-12">
-<div class="form-group">
-<strong>Tunnel IP:</strong>
-<input type="text" name="tunnel_ip" id="tunnel_ip" class="form-control" onchange="validate()" required>
-</div>
-</div>
-
-<div class="col-xs-12 col-sm-12 col-md-12">
-<div class="form-group">
-<strong>Device Serial:</strong>
-<input type="text" name="device_serial" id="device_serial" class="form-control" onchange="validate()" required>
 </div>
 </div>
 
@@ -497,14 +454,10 @@ table.table .avatar {
 </div>
 </div>
 </div>
+<!--  -->
+
 
 </body>
-
-<script>
-        @if (count($errors) > 0)
-        $('#crud-modal').modal('show');
-    @endif
-  </script>
 
 <script type="text/javascript">
 $('#new-customer').click(function () {

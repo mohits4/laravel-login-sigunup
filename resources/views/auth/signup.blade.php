@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>SafeandSecureRetirementIS-FINT</title>
+  <title>911Inform-LGLA | SigunUp</title>
   <meta name="description" content="">
   <meta name="author" content="">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,8 +24,8 @@
      				<div class="logoContent">
      					<h2>Already Account! </h2>
      					<p>Lorem Ipsum is simply dummy text of the printing and 
-typesetting industry Lorem Ipsum has been the
-industry's standard dummy</p>
+							typesetting industry Lorem Ipsum has been the
+							industry's standard dummy</p>
 						
 						<div class="regBtn">
 							<a href="{{ route('login') }}"><button class="btn"> Log in </button></a>
@@ -40,9 +40,7 @@ industry's standard dummy</p>
      				<h1>Sing up</h1>
      				<p>Give us some of your information to<br/> 
 get access </p>
-     			</div>
-
-    
+     			</div>    
 	<form method="POST" action="{{ route('register') }}">
 		@csrf
 	<div class="row">
