@@ -13,9 +13,10 @@ class ConnectionController extends Controller
     public function index(Request $request)
 	{ 			
 		$connections = DB::table('tbl_route_tables_info as tr' )
-		->select('tr.*','tbl_info.tunnel_ip','tbl_info.device_serial' )
+		->select('tr.*','tbl_info.tunnel_ip','tbl_info.device_serial','tbl_info.id as tbl_info_id' )
 		->join('tbl_device_info as tbl_info', 'tbl_info.route_id', '=','tr.id')
-		->get();		
+		->get();	
+	
 		return view('connection_list', compact('connections'));
 	}
 	
@@ -48,18 +49,29 @@ class ConnectionController extends Controller
 
 	public function getUserData(Request $request)
     {
-		$Connection = Connection::find($request['user_id']);
-		return $Connection;		
+		// $Connection = Connection::find($request['user_id']);
+		// return $Connection;	
+		 $Connection = Connection::join('tbl_device_info','tbl_device_info.route_id','=','tbl_route_tables_info.id')
+		 ->select('tbl_device_info.*', 'tbl_route_tables_info.*')->where('tbl_route_tables_info.id', $request['user_id'])->get();		 		
+		 return $Connection;			
 	}
 
 	public function update(Request $request, $id)
-	{  			
+	{  	
 		$connection = Connection::find($request->get('selectitem'));
 		$connection->destination   = $request->get('destination');
-		$connection->gateway  = $request->get('gateway');
-		$connection->genmask  = $request->get('genmask');
-		$connection->metric  = $request->get('metric');
-		$test1 = $connection->update();		
+		$connection->gateway  	   = $request->get('gateway');
+		$connection->genmask  	   = $request->get('genmask');
+		$connection->metric   	   = $request->get('metric');
+		$connection->update();
+
+		$diveceinfo = DeviceInfo::where('id', $request->selecttblinfoitem)->first();
+		if(isset($diveceinfo)){
+		  $diveceinfo->tunnel_ip = $request->get('tunnel_ip');
+		  $diveceinfo->device_serial = $request->get('device_serial');
+		  $diveceinfo->save();
+		}  
+		
 		return redirect('connection-list')->with('success', 'Connection updated successfully');	
 	}
 

@@ -288,7 +288,7 @@ table.table .avatar {
 						<td>{{$connection->tunnel_ip}}</td>
 						<td>{{$connection->device_serial}}</td>						
 						<td>
-							<a href="#editEmployeeModal" class="connection_edit" conid="{{ $connection->id}}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#editEmployeeModal" class="connection_edit" conid="{{ $connection->id}}" tblinfoid="{{ $connection->tbl_info_id}}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 							<a onclick="confirm_delete({{$connection->id}});" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>							
 						</td>
 					</tr>
@@ -352,7 +352,8 @@ table.table .avatar {
 		<div class="modal-content">
 			<form method="POST" action ="{{ url('connection/update', $connection->id )}}">
 			@csrf
-			<input type="hidden" name="selectitem" id="selectitem" value=""> 
+			<input type="hidden" name="selectitem" id="selectitem" value="">
+			<input type="hidden" name="selecttblinfoitem" id="selecttblinfoitem" value="">
 				<div class="modal-header">						
 					<h4 class="modal-title">Edit List</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -360,7 +361,7 @@ table.table .avatar {
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Destination</label>
-						<input type="text" id="destinationf" name="destination" value="{{$connection->destination}}" class="form-control" required>
+						<input type="text" id="destination" name="destination" value="{{$connection->destination}}" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>gateway</label>
@@ -376,11 +377,11 @@ table.table .avatar {
 					</div>		
 					<div class="form-group">
 						<label>Tunnel IP</label>
-						<input type="text" id="metric" name="metric" value="{{$connection->tunnel_ip}}" class="form-control" required>
+						<input type="text" id="tunnel_ip" name="tunnel_ip" value="{{$connection->tunnel_ip}}" class="form-control" required>
 					</div>	
 					<div class="form-group">
 						<label>Device Serial</label>
-						<input type="text" id="metric" name="metric" value="{{$connection->device_serial}}" class="form-control" required>
+						<input type="text" id="device_serial" name="device_serial" value="{{$connection->device_serial}}" class="form-control" required>
 					</div>				
 				</div>
 				<div class="modal-footer">
@@ -497,15 +498,16 @@ table.table .avatar {
 </div>
 </div>
 </div>
-
 </body>
 
-<script>
-        @if (count($errors) > 0)
-        $('#crud-modal').modal('show');
-    @endif
-  </script>
 
+<!-- For validate Model -->
+<script>
+	@if (count($errors) > 0)
+		$('#crud-modal').modal('show');
+	@endif
+</script>
+<!-- For add -->
 <script type="text/javascript">
 $('#new-customer').click(function () {
 $('#btn-save').val("create-customer");
@@ -514,26 +516,26 @@ $('#customerCrudModal').html("Add New Connection");
 $('#crud-modal').modal('show');
 });
 
-
-
 /*
 For Update
 */
 $('.connection_edit').on('click',function () {
     var user_id = $(this).attr('conid');
-
+	var tbl_info_id = $(this).attr('tblinfoid');
 	$('#editEmployeeModal').find('#selectitem').val(user_id);
-	
+	$('#editEmployeeModal').find('#selecttblinfoitem').val(tbl_info_id);
      $.ajax({
         url: "/getUserData",
         type: "get",
-        data: {user_id: user_id} ,
+        data: {user_id: user_id, tbl_info_id: tbl_info_id} ,
         success: function (response) {
           console.log(response); 		          
-           $('#destinationf').val(response['destination']);
-           $('#gateway').val(response['gateway']);
-           $('#genmask').val(response['genmask']);
-           $('#metric').val(response['metric']);
+           $('#destination').val(response[0]['destination']);
+           $('#gateway').val(response[0]['gateway']);
+           $('#genmask').val(response[0]['genmask']);
+           $('#metric').val(response[0]['metric']);
+		   $('#tunnel_ip').val(response[0]['tunnel_ip']);
+		   $('#device_serial').val(response[0]['device_serial']);
         },
     });
   });
